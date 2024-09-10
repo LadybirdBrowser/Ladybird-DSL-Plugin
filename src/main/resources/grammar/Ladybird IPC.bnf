@@ -1,0 +1,54 @@
+{
+    parserClass="org.ladybird.dsl.ipc.IPCParser"
+
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix="IPC"
+    psiImplClassSuffix="Impl"
+    psiPackage="org.ladybird.dsl.ipc.psi.api"
+    psiImplPackage="org.ladybird.dsl.ipc.psi.impl"
+
+    elementTypeHolderClass="org.ladybird.dsl.ipc.IPCTypes"
+    elementTypeClass="org.ladybird.dsl.ipc.IPCElementType"
+    tokenTypeClass="org.ladybird.dsl.ipc.IPCToken"
+
+    tokens=[
+        COMMENT="regexp:(//[^\r\n]*)+"
+    ]
+
+    implements(".*")="org.ladybird.dsl.ipc.psi.IPCPsiElement"
+    generateTokenAccessors=true
+}
+
+File ::= Include* Endpoint
+
+Include ::= KEYWORD_INCLUDE (AngleIncludePath | QuoteIncludePath) {
+    mixin="org.ladybird.dsl.ipc.psi.mixins.IPCIncludeMixin"
+}
+
+fake IncludePath ::= (OPEN_ANGLE | QUOTE) INCLUDE_IDENTIFIER (CLOSE_ANGLE | QUOTE)
+AngleIncludePath ::= OPEN_ANGLE INCLUDE_IDENTIFIER CLOSE_ANGLE {
+    elementType=IncludePath
+}
+QuoteIncludePath ::= QUOTE INCLUDE_IDENTIFIER QUOTE {
+    elementType=IncludePath
+}
+
+Endpoint ::= KEYWORD_ENDPOINT IDENTIFIER OPEN_CURLY EndpointFunction* CLOSE_CURLY {
+    mixin="org.ladybird.dsl.ipc.psi.mixins.IPCEndpointMixin"
+}
+EndpointFunction ::= IDENTIFIER ParameterList Trailer
+
+ParameterList ::= OPEN_PAREN [Parameter (COMMA Parameter)*] CLOSE_PAREN
+Parameter ::= AttributeList? Type IDENTIFIER
+AttributeList ::= OPEN_BRACKET IDENTIFIER (COMMA IDENTIFIER)* CLOSE_BRACKET
+
+Trailer ::= SyncTrailer | AsyncTrailer
+SyncTrailer ::= SYNC_ARROW ParameterList
+AsyncTrailer ::= ASYNC_ARROW
+
+Type ::= NAMESPACE? TypePart (NAMESPACE TypePart)*
+TypePart ::= IDENTIFIER TypeTemplates? {
+    mixin="org.ladybird.dsl.ipc.psi.mixins.IPCTypePartMixin"
+}
+TypeTemplates ::= OPEN_ANGLE Type (COMMA Type)* CLOSE_ANGLE

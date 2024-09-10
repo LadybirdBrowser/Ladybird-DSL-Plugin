@@ -1,0 +1,462 @@
+{
+    parserClass="org.ladybird.dsl.idl.IDLParser"
+
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix="IDL"
+    psiImplClassSuffix="Impl"
+    psiPackage="org.ladybird.dsl.idl.psi.api"
+    psiImplPackage="org.ladybird.dsl.idl.psi.impl"
+
+    elementTypeHolderClass="org.ladybird.dsl.idl.IDLTypes"
+    elementTypeClass="org.ladybird.dsl.idl.IDLElementType"
+    tokenTypeClass="org.ladybird.dsl.idl.IDLToken"
+
+//    parserUtilClass="org.ladybird.dsl.idl.IDLParserUtil"
+
+    tokens=[
+        COMMENT="regexp:(//[^\r\n]*)+"
+    ]
+
+    implements(".*")="org.ladybird.dsl.idl.psi.IDLPsiElement"
+
+//    extends(".+BinaryExpression")=BinaryExpression
+//    extends(".+Expression")=Expression
+//    extends(".+Statement")=Statement
+//
+//    name(".*Expression")="expression"
+//    name(".*Statement")="statement"
+//
+//    consumeTokenMethod(".*Expression")="consumeTokenFast"
+    generateTokenAccessors=true
+}
+
+Definitions ::= ImportStatement* (ExtendedAttributeList? Definition)*
+
+Definition ::=
+      Callback
+    | Interface
+    | CallbackInterface
+    | InterfaceMixin
+    | Namespace
+    | Partial
+    | Dictionary
+    | Enum
+    | Typedef
+    | IncludesStatement
+
+ArgumentNameKeyword ::=
+      KEYWORD_ASYNC
+    | KEYWORD_ATTRIBUTE
+    | KEYWORD_CALLBACK
+    | KEYWORD_CONST
+    | KEYWORD_CONSTRUCTOR
+    | KEYWORD_DELETER
+    | KEYWORD_DICTIONARY
+    | KEYWORD_ENUM
+    | KEYWORD_GETTER
+    | KEYWORD_INCLUDES
+    | KEYWORD_INHERIT
+    | KEYWORD_INTERFACE
+    | KEYWORD_ITERABLE
+    | KEYWORD_MAPLIKE
+    | KEYWORD_MIXIN
+    | KEYWORD_NAMESPACE
+    | KEYWORD_PARTIAL
+    | KEYWORD_READONLY
+    | KEYWORD_REQUIRED
+    | KEYWORD_SETLIKE
+    | KEYWORD_SETTER
+    | KEYWORD_STATIC
+    | KEYWORD_STRINGIFIER
+    | KEYWORD_TYPEDEF
+    | KEYWORD_UNRESTRICTED
+
+Callback ::= KEYWORD_CALLBACK IDENTIFIER EQUALS Type OPEN_PAREN ArgumentList CLOSE_PAREN SEMICOLON {
+    mixin="org.ladybird.dsl.idl.psi.mixins.IDLCallbackMixin"
+}
+
+CallbackInterface ::= KEYWORD_CALLBACK KEYWORD_INTERFACE IDENTIFIER OPEN_CURLY CallbackInterfaceMembers CLOSE_CURLY SEMICOLON {
+    mixin="org.ladybird.dsl.idl.psi.mixins.IDLCallbackInterfaceMixin"
+}
+
+Interface ::= KEYWORD_CALLBACK? KEYWORD_INTERFACE IDENTIFIER Inheritance OPEN_CURLY InterfaceMembers CLOSE_CURLY SEMICOLON {
+    mixin="org.ladybird.dsl.idl.psi.mixins.IDLInterfaceMixin"
+}
+
+InterfaceMixin ::= KEYWORD_INTERFACE KEYWORD_MIXIN IDENTIFIER OPEN_CURLY MixinMembers CLOSE_CURLY SEMICOLON {
+    mixin="org.ladybird.dsl.idl.psi.mixins.IDLInterfaceMixinMixin"
+}
+
+fake Member ::=
+      Const
+    | RegularOrSpecialOperation
+    | Stringifier
+    | StaticMember
+    | Iterable
+    | AsyncIterable
+    | ReadOnlyMember
+    | ReadWriteAttribute
+    | ReadWriteMaplike
+    | ReadWriteSetlike
+    | InheritAttribute
+    | Constructor
+
+CallbackInterfaceMembers ::= (ExtendedAttributeList? CallbackInterfaceMember)*
+
+CallbackInterfaceMember ::=
+      Const
+    | RegularOperation {
+    elementType=Member
+}
+
+Partial ::= KEYWORD_PARTIAL PartialDefinition
+
+PartialDefinition ::=
+      KEYWORD_INTERFACE PartialInterfaceOrPartialMixin
+    | PartialDictionary
+    | Namespace
+
+PartialInterfaceOrPartialMixin ::=
+      PartialInterfaceRest
+    | MixinRest
+
+PartialInterfaceRest ::= Ident OPEN_CURLY PartialInterfaceMembers CLOSE_CURLY SEMICOLON
+
+InterfaceMembers ::= (ExtendedAttributeList? InterfaceMember)*
+
+InterfaceMember ::=
+      PartialInterfaceMember
+    | Constructor {
+    elementType=Member
+}
+
+PartialInterfaceMembers ::= (ExtendedAttributeList? PartialInterfaceMember)*
+
+PartialInterfaceMember ::=
+      Const
+    | RegularOrSpecialOperation
+    | Stringifier
+    | StaticMember
+    | Iterable
+    | AsyncIterable
+    | ReadOnlyMember
+    | ReadWriteAttribute
+    | ReadWriteMaplike
+    | ReadWriteSetlike
+    | InheritAttribute
+    | OptionalReadOnly AttributeRest {
+    elementType=Member
+}
+
+Inheritance ::= [COLON Ident]
+
+MixinRest ::= KEYWORD_MIXIN Ident OPEN_CURLY MixinMembers CLOSE_CURLY SEMICOLON
+
+MixinMembers ::= (ExtendedAttributeList? MixinMember)*
+
+MixinMember ::=
+      Const
+    | RegularOperation
+    | Stringifier
+    | OptionalReadOnly AttributeRest {
+    elementType=Member
+}
+
+IncludesStatement ::=
+    Ident KEYWORD_INCLUDES Ident SEMICOLON
+
+// Non-standard
+ImportStatement ::= KEYWORD_IMPORT ImportPath {
+    mixin="org.ladybird.dsl.idl.psi.mixins.IDLImportStatementMixin"
+}
+
+ImportPath ::= OPEN_ANGLE IDENTIFIER (SLASH IDENTIFIER)* [DOT IDENTIFIER] CLOSE_ANGLE
+
+Const ::= KEYWORD_CONST ConstType IDENTIFIER EQUALS ConstValue SEMICOLON
+
+ConstValue ::=
+      BooleanLiteral
+    | FloatLiteral
+    | INTEGER
+
+BooleanLiteral ::=
+      'true'
+    | 'false'
+
+FloatLiteral ::=
+      DECIMAL
+    | DASH? 'Infinity'
+    | 'NaN'
+
+NullLiteral ::= 'null'
+
+UndefinedLiteral ::= 'undefined'
+
+ConstType ::=
+      PrimitiveType
+    | Ident
+
+ReadOnlyMember ::= KEYWORD_READONLY ReadOnlyMemberRest
+
+ReadOnlyMemberRest ::=
+      AttributeRest
+    | MaplikeRest
+    | SetlikeRest
+
+private ReadWriteAttribute ::= AttributeRest
+
+private InheritAttribute ::= KEYWORD_INHERIT AttributeRest
+
+AttributeRest ::= KEYWORD_ATTRIBUTE TypeWithExtendedAttributes AttributeName SEMICOLON
+
+AttributeName ::=
+      KEYWORD_ASYNC
+    | KEYWORD_REQUIRED
+    | IDENTIFIER
+
+private OptionalReadOnly ::= KEYWORD_READONLY?
+
+DefaultValue ::=
+      ConstValue
+    | STRING
+    | OPEN_BRACKET CLOSE_BRACKET
+    | OPEN_CURLY CLOSE_CURLY
+    | NullLiteral
+    | UndefinedLiteral
+
+fake Operation ::= Special? Type OperationName? OPEN_PAREN ArgumentList CLOSE_PAREN SEMICOLON
+
+RegularOperation ::= Type OperationName? OPEN_PAREN ArgumentList CLOSE_PAREN SEMICOLON {
+    elementType=Operation
+}
+
+RegularOrSpecialOperation ::= Special? Type OperationName? OPEN_PAREN ArgumentList CLOSE_PAREN SEMICOLON {
+    elementType=Operation
+}
+
+Special ::=
+      KEYWORD_GETTER
+    | KEYWORD_SETTER
+    | KEYWORD_DELETER
+
+OperationName ::=
+      KEYWORD_INCLUDES
+    | IDENTIFIER
+
+ArgumentList ::= [Argument Arguments]
+
+private Arguments ::= [COMMA Argument Arguments]
+
+Argument ::= ExtendedAttributeList? ArgumentRest
+
+private ArgumentRest ::=
+      KEYWORD_OPTIONAL TypeWithExtendedAttributes ArgumentName Default
+    | Type Ellipsis ArgumentName
+
+ArgumentName ::=
+      ArgumentNameKeyword
+    | IDENTIFIER
+
+Ellipsis ::= [TRIPLE_DOT]
+
+Constructor ::= KEYWORD_CONSTRUCTOR OPEN_PAREN ArgumentList CLOSE_PAREN SEMICOLON
+
+Stringifier ::= KEYWORD_STRINGIFIER StringifierRest
+
+StringifierRest ::=
+      OptionalReadOnly AttributeRest
+    | SEMICOLON
+
+StaticMember ::= KEYWORD_STATIC StaticMemberRest
+
+StaticMemberRest ::=
+      OptionalReadOnly AttributeRest
+    | RegularOperation
+
+Iterable ::= KEYWORD_ITERABLE OPEN_ANGLE TypeWithExtendedAttributes OptionalType CLOSE_ANGLE SEMICOLON
+
+OptionalType ::= [COMMA TypeWithExtendedAttributes]
+
+AsyncIterable ::= KEYWORD_ASYNC KEYWORD_ITERABLE OPEN_ANGLE TypeWithExtendedAttributes OptionalType CLOSE_ANGLE OptionalArgumentList SEMICOLON
+
+OptionalArgumentList ::= [OPEN_PAREN ArgumentList CLOSE_PAREN]
+
+ReadWriteMaplike ::= MaplikeRest
+
+MaplikeRest ::= KEYWORD_MAPLIKE OPEN_ANGLE TypeWithExtendedAttributes COMMA TypeWithExtendedAttributes CLOSE_ANGLE SEMICOLON
+
+ReadWriteSetlike ::= SetlikeRest
+
+SetlikeRest ::= KEYWORD_SETLIKE OPEN_ANGLE TypeWithExtendedAttributes CLOSE_ANGLE SEMICOLON
+
+Namespace ::= KEYWORD_NAMESPACE IDENTIFIER OPEN_CURLY NamespaceMembers CLOSE_CURLY SEMICOLON
+
+NamespaceMembers ::= (ExtendedAttributeList? NamespaceMember)*
+
+NamespaceMember ::=
+      RegularOperation
+    | KEYWORD_READONLY AttributeRest
+    | Const
+
+Dictionary ::= KEYWORD_DICTIONARY IDENTIFIER Inheritance OPEN_CURLY DictionaryMembers CLOSE_CURLY SEMICOLON {
+    mixin="org.ladybird.dsl.idl.psi.mixins.IDLDictionaryMixin"
+}
+
+private DictionaryMembers ::= DictionaryMember*
+
+DictionaryMember ::= ExtendedAttributeList? (RequiredDictionaryMember | OptionalDictionaryMember)
+
+RequiredDictionaryMember ::= KEYWORD_REQUIRED TypeWithExtendedAttributes IDENTIFIER SEMICOLON
+
+OptionalDictionaryMember ::= Type IDENTIFIER Default SEMICOLON
+
+PartialDictionary ::= KEYWORD_DICTIONARY Ident OPEN_CURLY DictionaryMembers CLOSE_CURLY SEMICOLON
+
+private Default ::= [EQUALS DefaultValue]
+
+Enum ::= KEYWORD_ENUM IDENTIFIER OPEN_CURLY STRING (COMMA STRING)* COMMA? CLOSE_CURLY SEMICOLON {
+    mixin="org.ladybird.dsl.idl.psi.mixins.IDLEnumMixin"
+}
+
+Typedef ::= KEYWORD_TYPEDEF TypeWithExtendedAttributes IDENTIFIER SEMICOLON {
+    mixin="org.ladybird.dsl.idl.psi.mixins.IDLTypedefMixin"
+}
+
+// Note: This encompasses "SingleType" and "DistinguishableType" as well. The only difference is
+//       that 'any', PromiseType, and UnionType can't appear in unions, but those are better
+//       issued as warnings
+// TODO: Add those warnings
+Type ::=
+      AnyType
+    | PromiseType
+    | PrimitiveType Null
+    | StringType Null
+    | SequenceType Null
+    | ObjectType Null
+    | SymbolType Null
+    | BufferRelatedType Null
+    | FrozenArrayType Null
+    | ObservableArrayType Null
+    | RecordType Null
+    | UndefinedLiteral Null
+    | BuiltinPlatformType Null
+    | PlatformType Null
+    | UnionType Null
+
+AnyType ::= 'any'
+
+SequenceType ::= 'sequence' OPEN_ANGLE TypeWithExtendedAttributes CLOSE_ANGLE
+
+ObjectType ::= 'object'
+
+SymbolType ::= 'symbol'
+
+FrozenArrayType ::= FrozenArrayTypeName OPEN_ANGLE TypeWithExtendedAttributes CLOSE_ANGLE
+FrozenArrayTypeName ::= 'FrozenArray'
+
+ObservableArrayType ::= ObservableArrayTypeName OPEN_ANGLE TypeWithExtendedAttributes CLOSE_ANGLE
+ObservableArrayTypeName ::= 'ObservableArray'
+
+BuiltinPlatformType ::=
+      'WindowProxy' // This has no IDL file
+    | 'Function'
+    | 'VoidFunction'
+
+PlatformType ::= Ident
+
+TypeWithExtendedAttributes ::= ExtendedAttributeList? Type
+
+UnionType ::= OPEN_PAREN UnionMemberType (UnionSeparator UnionMemberType)* CLOSE_PAREN
+
+UnionSeparator ::= 'or'
+
+UnionMemberType ::= ExtendedAttributeList? Type
+
+PrimitiveType ::=
+      UnsignedIntegerType
+    | UnrestrictedFloatType
+    | 'boolean'
+    | 'byte'
+    | 'octet'
+    | 'bigint'
+
+private UnrestrictedFloatType ::= 'unrestricted'? FloatType
+
+private FloatType ::=
+      'float'
+    | 'double'
+
+private UnsignedIntegerType ::= 'unsigned'? IntegerType
+
+private IntegerType ::=
+      'short'
+    | 'long' 'long'?
+
+StringType ::=
+      'ByteString'
+    | 'DOMString'
+    | 'USVString'
+    | 'CSSOMString'
+
+PromiseType ::= PromiseTypeName OPEN_ANGLE Type CLOSE_ANGLE
+PromiseTypeName ::= 'Promise'
+
+RecordType ::= RecordTypeName OPEN_ANGLE StringType COMMA TypeWithExtendedAttributes CLOSE_ANGLE
+RecordTypeName ::= 'record'
+
+Null ::= QUESTION_MARK?
+
+BufferRelatedType ::=
+      'ArrayBuffer' 'View'?
+    | 'SharedArrayBuffer'
+    | 'AllowSharedBufferSource'
+    | 'BufferSource'
+    | 'DataView'
+    | 'Int8Array'
+    | 'Int16Array'
+    | 'Int32Array'
+    | 'Uint8Array'
+    | 'Uint16Array'
+    | 'Uint32Array'
+    | 'Uint8ClampedArray'
+    | 'BigInt64Array'
+    | 'BigUint64Array'
+    | 'Float32Array'
+    | 'Float64Array'
+
+// The way the WebIDL spec defines extended attribute lists makes it very hard to syntax highlight,
+// so I've come up with an alternative grammar.
+// Note that this doesn't include the "ExtendedAttributeArgList", since as the spec mentions, it is
+// unused
+// Also, all identifier children of this rule use IDENTIFIER instead of Ident so they don't participate
+// in identifier resolution. This is important since most types reference in extended attributes don't
+// have an associated import statement, and would otherwise be highlighted as an error by the annotators
+ExtendedAttributeList ::= OPEN_BRACKET ExtendedAttribute (COMMA ExtendedAttribute)* CLOSE_BRACKET
+
+// TODO: The trailer shouldn't be optional, but we have a custom attribute "MissingDefaultValue" that
+//       for some reason has a blank value in one of the IDL files
+ExtendedAttribute ::= IDENTIFIER [EQUALS ExtendedAttributeTrailer?]
+
+private ExtendedAttributeTrailer ::=
+      ExtendedAttributeNamedArgList
+    | ExtendedAttributeIdent
+    | ExtendedAttributeIdentList
+    | ExtendedAttributeWildcard
+    | ExtendedAttributeOther
+
+ExtendedAttributeNamedArgList ::= IDENTIFIER OPEN_PAREN ArgumentList CLOSE_PAREN
+
+ExtendedAttributeIdent ::= IDENTIFIER
+
+ExtendedAttributeIdentList ::= OPEN_PAREN IDENTIFIER (COMMA IDENTIFIER)* CLOSE_PAREN
+
+ExtendedAttributeWildcard ::= ASTERISK
+
+// TODO: There are probably other things this can be
+// TODO: Don't color this as a keyword
+ExtendedAttributeOther ::= ArgumentNameKeyword
+
+Ident ::= IDENTIFIER {
+    mixin="org.ladybird.dsl.idl.psi.mixins.IDLIdentMixin"
+}

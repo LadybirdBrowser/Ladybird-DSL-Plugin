@@ -1,11 +1,11 @@
-# SerenityOS DSL IntelliJ Plugin
+# Ladybird DSL IntelliJ Plugin
 
-![Build](https://github.com/mattco98/serenityos-intellij-plugin/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/SerenityOS-DSL.svg)](https://plugins.jetbrains.com/plugin/SerenityOS-DSL)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/SerenityOS-DSL.svg)](https://plugins.jetbrains.com/plugin/SerenityOS-DSL)
+![Build](https://github.com/LadybirdBrowser/Ladybird-DSL-Plugin/workflows/Build/badge.svg)
+[![Version](https://img.shields.io/jetbrains/plugin/v/Ladybird-DSL.svg)](https://plugins.jetbrains.com/plugin/Ladybird-DSL)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/Ladybird-DSL.svg)](https://plugins.jetbrains.com/plugin/Ladybird-DSL)
 
 <!-- Plugin description -->
-Adds syntax highlighting for SerenityOS-specific file types. Currently only supports .idl files.
+Adds syntax highlighting for Ladybird file types. Currently supports IDL and IPC files.
 
 Features:
 - Syntax highlighting
@@ -22,16 +22,16 @@ Features:
 
 - Using the IDE built-in plugin system:
   
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "SerenityOS DSL"</kbd> >
+  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "Ladybird DSL"</kbd> >
   <kbd>Install</kbd>
   
 - Manually:
 
-  Download the [latest release](https://github.com/mattco98/serenityos-intellij-plugin/releases/latest) and install it manually using
+  Download the [latest release](https://github.com/LadybirdBrowser/Ladybird-DSL-Plugin/releases/latest) and install it manually using
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 ## Attribution
 
-The icon used as the plugin logo and file icon is the [WebIDL logo](https://resources.whatwg.org/logo-webidl.svg), 
+The icon used as the IDL file icon is the [WebIDL logo](https://resources.whatwg.org/logo-webidl.svg), 
 licensed under [CC BY 4.0](https://github.com/whatwg/webidl/blob/main/LICENSE). It has been altered slightly to have
 a transparent background instead of a white background. 

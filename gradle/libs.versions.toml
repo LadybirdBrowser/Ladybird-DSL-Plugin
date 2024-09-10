@@ -3,10 +3,10 @@
 annotations = "24.1.0"
 
 # plugins
-kotlin = "1.9.22"
+intellijPlatform = "2.0.1"
+kotlin = "1.9.25"
 changelog = "2.2.0"
-gradleIntelliJPlugin = "1.17.0"
-grammarkit = "2022.3.2.1"
+grammarkit = "2022.3.2.2"
 kotlinxSerialization = "1.6.2"
 
 [libraries]
@@ -15,7 +15,7 @@ kotlinSerialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seriali
 
 [plugins]
 changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
-gradleIntelliJPlugin = { id = "org.jetbrains.intellij", version.ref = "gradleIntelliJPlugin" }
+intellijPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "intellijPlatform" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 grammarkit = { id = "org.jetbrains.grammarkit", version.ref = "grammarkit" }

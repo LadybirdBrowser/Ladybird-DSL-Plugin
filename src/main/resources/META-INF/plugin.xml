@@ -1,8 +1,8 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>me.mattco.serenityos-dsl</id>
-    <name>SerenityOS-DSL</name>
-    <vendor>mattco98</vendor>
+    <id>org.ladybird.dsl</id>
+    <name>Ladybird-DSL</name>
+    <vendor>ADKaster</vendor>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.clion</depends>
@@ -10,186 +10,114 @@
     <depends>com.intellij.cidr.lang</depends>
 
     <description><![CDATA[
-        Adds syntax highlighting for SerenityOS-specific file types.
+        Adds syntax highlighting for Ladybird file types.
         <br/>
-        Currently only supports .idl files.
+        Currently supports .idl and .ipc files.
     ]]></description>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- GML  -->
-        <fileType
-                name="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.GMLFileType"
-                fieldName="INSTANCE"
-                language="SerenityOS GML"
-                extensions="gml"
-        />
-        <lang.parserDefinition
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.GMLParserDefinition"
-        />
-        <lang.syntaxHighlighterFactory
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.GMLSyntaxHighlighterFactory"
-        />
-        <lang.commenter
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.common.DSLCommenter"
-        />
-        <lang.foldingBuilder
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.GMLBlockFoldingBuilder"
-        />
-        <lang.formatter
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.formatting.GMLFormattingModelBuilder"
-        />
-        <lang.braceMatcher
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.formatting.GMLBraceMatcher"
-        />
-        <lineIndentProvider
-                implementationClass="me.mattco.serenityos.gml.formatting.GMLLineIndentProvider"
-        />
-        <lang.documentationProvider
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.GMLDocumentationProvider"
-        />
-        <codeStyleSettingsProvider
-                implementation="me.mattco.serenityos.gml.formatting.GMLCodeStyleSettingsProvider"
-        />
-        <langCodeStyleSettingsProvider
-                implementation="me.mattco.serenityos.gml.formatting.GMLLanguageCodeStyleSettingsProvider"
-        />
-        <annotator
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.annotators.GMLSyntaxAnnotator"
-        />
-        <annotator
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.annotators.GMLErrorAnnotator"
-        />
-        <codeInsight.lineMarkerProvider
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.GMLLineMarkerProvider"
-        />
-        <completion.contributor
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.completions.GMLCompletionContributor"
-        />
-        <colorSettingsPage implementation="me.mattco.serenityos.gml.GMLColorSettingsPage" />
-        <projectService
-                serviceInterface="me.mattco.serenityos.gml.GMLService"
-                serviceImplementation="me.mattco.serenityos.gml.GMLServiceImpl"
-                configurationSchemaKey="serenityGML"
-        />
-        <postStartupActivity
-                language="SerenityOS GML"
-                implementationClass="me.mattco.serenityos.gml.GMLStartupActivity"
-        />
-
         <!-- IDL  -->
         <fileType
-                name="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.idl.IDLFileType"
+                name="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.idl.IDLFileType"
                 fieldName="INSTANCE"
-                language="SerenityOS IDL"
+                language="Ladybird IDL"
                 extensions="idl"
         />
         <lang.parserDefinition
-                language="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.idl.IDLParserDefinition"
+                language="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.idl.IDLParserDefinition"
         />
         <lang.syntaxHighlighterFactory
-                language="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.idl.IDLSyntaxHighlighterFactory"
+                language="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.idl.IDLSyntaxHighlighterFactory"
         />
         <lang.foldingBuilder
-                language="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.idl.IDLBlockFoldingBuilder"
+                language="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.idl.IDLBlockFoldingBuilder"
         />
         <lang.foldingBuilder
-                language="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.idl.IDLImportFoldingBuilder"
+                language="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.idl.IDLImportFoldingBuilder"
         />
         <lang.commenter
-                language="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.common.DSLCommenter"
+                language="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.common.DSLCommenter"
         />
         <lang.findUsagesProvider
-                language="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.idl.IDLFindUsagesProvider"
+                language="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.idl.IDLFindUsagesProvider"
         />
         <annotator
-                language="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.idl.annotation.IDLSyntaxAnnotator"
+                language="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.idl.annotation.IDLSyntaxAnnotator"
         />
         <annotator
-                language="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.idl.annotation.IDLErrorAnnotator"
+                language="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.idl.annotation.IDLErrorAnnotator"
         />
         <codeInsight.lineMarkerProvider
-                language="SerenityOS IDL"
-                implementationClass="me.mattco.serenityos.idl.IDLLineMarkerProvider"
+                language="Ladybird IDL"
+                implementationClass="org.ladybird.dsl.idl.IDLLineMarkerProvider"
         />
         <codeInsight.lineMarkerProvider
                 language="ObjectiveC"
-                implementationClass="me.mattco.serenityos.idl.IDLLineMarkerProvider"
+                implementationClass="org.ladybird.dsl.idl.IDLLineMarkerProvider"
         />
         <codeInsight.lineMarkerProvider
                 language="ObjectiveC++"
-                implementationClass="me.mattco.serenityos.idl.IDLLineMarkerProvider"
+                implementationClass="org.ladybird.dsl.idl.IDLLineMarkerProvider"
         />
         <codeInsight.lineMarkerProvider
                 language="ObjectiveC/C++"
-                implementationClass="me.mattco.serenityos.idl.IDLLineMarkerProvider"
+                implementationClass="org.ladybird.dsl.idl.IDLLineMarkerProvider"
         />
-        <colorSettingsPage implementation="me.mattco.serenityos.idl.IDLColorSettingsPage" />
+        <colorSettingsPage implementation="org.ladybird.dsl.idl.IDLColorSettingsPage" />
         <projectService
-                serviceInterface="me.mattco.serenityos.idl.project.IDLProjectService"
-                serviceImplementation="me.mattco.serenityos.idl.project.IDLProjectServiceImpl"
+                serviceInterface="org.ladybird.dsl.idl.project.IDLProjectService"
+                serviceImplementation="org.ladybird.dsl.idl.project.IDLProjectServiceImpl"
         />
 
         <!-- IPC  -->
         <fileType
-                name="SerenityOS IPC"
-                implementationClass="me.mattco.serenityos.ipc.IPCFileType"
+                name="Ladybird IPC"
+                implementationClass="org.ladybird.dsl.ipc.IPCFileType"
                 fieldName="INSTANCE"
-                language="SerenityOS IPC"
+                language="Ladybird IPC"
                 extensions="ipc"
         />
         <lang.parserDefinition
-                language="SerenityOS IPC"
-                implementationClass="me.mattco.serenityos.ipc.IPCParserDefinition"
+                language="Ladybird IPC"
+                implementationClass="org.ladybird.dsl.ipc.IPCParserDefinition"
         />
         <lang.syntaxHighlighterFactory
-                language="SerenityOS IPC"
-                implementationClass="me.mattco.serenityos.ipc.IPCSyntaxHighlighterFactory"
+                language="Ladybird IPC"
+                implementationClass="org.ladybird.dsl.ipc.IPCSyntaxHighlighterFactory"
         />
         <lang.commenter
-                language="SerenityOS IPC"
-                implementationClass="me.mattco.serenityos.common.DSLCommenter"
+                language="Ladybird IPC"
+                implementationClass="org.ladybird.dsl.common.DSLCommenter"
         />
         <annotator
-                language="SerenityOS IPC"
-                implementationClass="me.mattco.serenityos.ipc.IPCSyntaxAnnotator"
+                language="Ladybird IPC"
+                implementationClass="org.ladybird.dsl.ipc.IPCSyntaxAnnotator"
         />
         <codeInsight.lineMarkerProvider
-                language="SerenityOS IPC"
-                implementationClass="me.mattco.serenityos.ipc.IPCLineMarkerProvider"
+                language="Ladybird IPC"
+                implementationClass="org.ladybird.dsl.ipc.IPCLineMarkerProvider"
         />
         <codeInsight.lineMarkerProvider
                 language="ObjectiveC"
-                implementationClass="me.mattco.serenityos.ipc.IPCLineMarkerProvider"
+                implementationClass="org.ladybird.dsl.ipc.IPCLineMarkerProvider"
         />
         <codeInsight.lineMarkerProvider
                 language="ObjectiveC++"
-                implementationClass="me.mattco.serenityos.ipc.IPCLineMarkerProvider"
+                implementationClass="org.ladybird.dsl.ipc.IPCLineMarkerProvider"
         />
-        <colorSettingsPage implementation="me.mattco.serenityos.ipc.IPCColorSettingsPage" />
+        <colorSettingsPage implementation="org.ladybird.dsl.ipc.IPCColorSettingsPage" />
         <projectService
-                serviceInterface="me.mattco.serenityos.ipc.project.IPCProjectService"
-                serviceImplementation="me.mattco.serenityos.ipc.project.IPCProjectServiceImpl"
+                serviceInterface="org.ladybird.dsl.ipc.project.IPCProjectService"
+                serviceImplementation="org.ladybird.dsl.ipc.project.IPCProjectServiceImpl"
         />
     </extensions>
 </idea-plugin>

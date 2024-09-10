@@ -3,14 +3,9 @@
 # Changelog
 
 ## Unreleased
-### Added
-- GML support
-  - Syntax highlighting
-  - Basic completion: navigate from a component to it's C++ definition
-  - A formatter which completely supports Serenity's GML styling
-  - Widget and property autocompletion
-  - Documentation on element hover for both widgets and properties
-  - Type linting
+### Changed
+
+- Forked into LadybirdBrowser organization
 
 ## 1.1.0 - 2024-01-21
 
