@@ -2,6 +2,8 @@
 
 # Changelog
 
+## Unreleased
+
 ## 2.0.2 - 2025-04-10
 
 ### Changed
