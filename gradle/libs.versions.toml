@@ -3,7 +3,7 @@
 annotations = "24.1.0"
 
 # plugins
-intellijPlatform = "2.0.1"
+intellijPlatform = "2.9.0"
 kotlin = "2.2.0"
 changelog = "2.2.0"
 grammarkit = "2022.3.2.2"
