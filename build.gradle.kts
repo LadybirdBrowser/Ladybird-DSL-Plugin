@@ -2,6 +2,8 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.grammarkit.tasks.GenerateLexerTask
 import org.jetbrains.grammarkit.tasks.GenerateParserTask
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = providers.gradleProperty(key)
@@ -47,7 +49,6 @@ dependencies {
         // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
         bundledPlugins(providers.gradleProperty("platformBundledPlugins").map { it.split(',') })
 
-        instrumentationTools()
         pluginVerifier()
         zipSigner()
     }
@@ -126,9 +127,10 @@ tasks {
             targetCompatibility = it
         }
         withType<KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = it
-                freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn", "-Xjvm-default=all")
+            compilerOptions {
+                jvmTarget = JvmTarget.fromTarget(it)
+                optIn.add("kotlin.RequiresOptIn")
+                jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
             }
         }
     }
@@ -165,8 +167,8 @@ tasks {
     compileKotlin {
         dependsOn("generateAll")
 
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xcontext-receivers")
+        compilerOptions {
+            freeCompilerArgs.add("-Xcontext-receivers")
         }
     }
 
