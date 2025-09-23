@@ -4,6 +4,14 @@
 
 ## Unreleased
 
+## 2.0.3 - 2025-09-23
+
+### Changed
+
+- Support CLion version 2025.2 and above
+
+### Added
+
 ## 2.0.2 - 2025-04-10
 
 ### Changed
